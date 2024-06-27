@@ -7,7 +7,7 @@ import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-   authDomain: 'jdnewshub.firebaseapp.com',
+   authDomain: 'www.jdnewshub.com',
   projectId: 'jdnewshub',
   storageBucket: 'jdnewshub.appspot.com',
   messagingSenderId: '767534919866',
