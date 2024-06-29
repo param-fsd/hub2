@@ -78,12 +78,13 @@ const stripHTML = (html) => {
 };
 
   const startSpeech = () => {
-    if (speechSynthesisInstance && post && post.content) {
-      const textContent = stripHTML(post.content);
-      speechSynthesisInstance.text = textContent;
-      window.speechSynthesis.speak(speechSynthesisInstance);
-    }
-  };
+  if (speechSynthesisInstance && post && post.content) {
+    const textContent = stripHTML(post.content);
+    speechSynthesisInstance.text = textContent;
+    speechSynthesisInstance.lang = 'kn-IN'; // Set language to Kannada
+    window.speechSynthesis.speak(speechSynthesisInstance);
+  }
+};
   
   const pauseSpeech = () => {
     if (speechSynthesisInstance) {
