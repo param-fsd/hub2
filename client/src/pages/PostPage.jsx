@@ -103,21 +103,30 @@ const stripHTML = (html) => {
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.content.slice(0, 100), // Short description
-        url: window.location.href,
-      })
-      .catch((error) => console.error('Error sharing', error));
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch((error) => console.error('Error copying link', error));
-    }
-  };
+const stripHTML1 = (html) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  return tempDiv.textContent || tempDiv.innerText || '';
+};
 
+
+const handleShare = () => {
+  if (post && navigator.share) {
+    // Clean the content to remove HTML tags
+    const cleanContent = stripHTML1(post.content);
+
+    navigator.share({
+      title: post.title,
+      text: cleanContent.slice(0, 100), // Short description without HTML tags
+      url: window.location.href,
+    })
+    .catch((error) => console.error('Error sharing', error));
+  } else {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => alert('Link copied to clipboard!'))
+      .catch((error) => console.error('Error copying link', error));
+  }
+};
   if (loading) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
