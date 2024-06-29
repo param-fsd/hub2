@@ -1,6 +1,8 @@
 import { Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
@@ -53,7 +55,6 @@ export default function PostPage() {
   }, []);
 
   useEffect(() => {
-    // Initialize speech synthesis instance when component mounts
     const initSpeechSynthesis = () => {
       const speech = new SpeechSynthesisUtterance();
       speech.lang = 'kn-IN'; // Set language to Kannada
@@ -62,23 +63,28 @@ export default function PostPage() {
 
     initSpeechSynthesis();
 
-    // Clean up function
     return () => {
-      // Stop speech synthesis when component unmounts
       if (speechSynthesisInstance) {
         speechSynthesisInstance.onend = null;
         window.speechSynthesis.cancel();
       }
     };
   }, []);
+  // Utility function to strip HTML tags
+const stripHTML = (html) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  return tempDiv.textContent || tempDiv.innerText || '';
+};
 
   const startSpeech = () => {
     if (speechSynthesisInstance && post && post.content) {
-      speechSynthesisInstance.text = post.content;
+      const textContent = stripHTML(post.content);
+      speechSynthesisInstance.text = textContent;
       window.speechSynthesis.speak(speechSynthesisInstance);
     }
   };
-
+  
   const pauseSpeech = () => {
     if (speechSynthesisInstance) {
       window.speechSynthesis.pause();
@@ -97,12 +103,29 @@ export default function PostPage() {
     }
   };
 
-  if (loading)
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: post.title,
+        text: post.content.slice(0, 100), // Short description
+        url: window.location.href,
+      })
+      .catch((error) => console.error('Error sharing', error));
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch((error) => console.error('Error copying link', error));
+    }
+  };
+
+  if (loading) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
         <Spinner size='xl' />
       </div>
     );
+  }
+
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
       <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
@@ -116,22 +139,70 @@ export default function PostPage() {
           {post && post.category}
         </Button>
       </Link>
+
+      {/* Share Button */}
+      <div className='flex justify-center my-5 mb-2 mt-2'>
+  <Button color='gray' onClick={handleShare} className='flex items-center' pill size='xs'>
+    <FontAwesomeIcon icon={faShareAlt} className='mr-2' />
+    <span className='text-sm'>Share</span>
+  </Button>
+</div>
+
+
       <img
         src={post && post.image}
         alt={post && post.title}
-        className='mt-10 p-3 max-h-[600px] w-full object-cover'
+        className='mt-2 p-3 max-h-[600px] w-full object-cover'
       />
+
       <div className='flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className='italic'>
           {post && (post.content.length / 1000).toFixed(0)} mins read
         </span>
       </div>
+      <div className='flex flex-col items-center justify-center gap-2 mt-2'>
+        
+        <div className='flex justify-center items-center gap-2'>
+        <h2>Speechout</h2>
+          <Button
+            color='primary'
+            className='flex items-center gap-1'
+            onClick={startSpeech}
+          >
+            <i className='fas fa-play'></i> 
+          </Button>
+          <Button
+            color='yellow'
+            className='flex items-center gap-1'
+            onClick={pauseSpeech}
+          >
+            <i className='fas fa-pause'></i> 
+          </Button>
+          <Button
+            color='blue'
+            className='flex items-center gap-1'
+            onClick={resumeSpeech}
+          >
+            <i className='fas fa-play-circle'></i> 
+          </Button>
+          <Button
+            color='red'
+            className='flex items-center gap-1'
+            onClick={stopSpeech}
+          >
+            <i className='fas fa-stop'></i> 
+          </Button>
+        </div>
+      </div>
       <div
         className='p-3 max-w-2xl mx-auto w-full post-content'
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
-      <div className='max-w-4xl mx-auto w-full'>
+
+  
+
+      <div className='max-w-4xl mx-auto w-full mt-10'>
         <CallToAction />
       </div>
       <CommentSection postId={post._id} />
@@ -142,22 +213,6 @@ export default function PostPage() {
           {recentPosts &&
             recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
         </div>
-      </div>
-
-      {/* Speech synthesis control buttons */}
-      <div className='max-w-4xl mx-auto w-full flex justify-center items-center gap-4'>
-        <Button color='primary' onClick={startSpeech}>
-          Start
-        </Button>
-        <Button color='yellow' onClick={pauseSpeech}>
-          Pause
-        </Button>
-        <Button color='blue' onClick={resumeSpeech}>
-          Resume
-        </Button>
-        <Button color='red' onClick={stopSpeech}>
-          Stop
-        </Button>
       </div>
     </main>
   );
