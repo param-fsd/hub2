@@ -51,14 +51,13 @@ export default function Header() {
   return (
     <Navbar className='border-b-2'>
       <Link
-        to='/'
-        className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
-      >
-        <span className='px-3 py-2 bg-gradient-to-r from-green-400 via-blue-400 to-teal-400 rounded-md text-white shadow-lg'>
-  JD News Hub
-</span>
-
-      </Link>
+    to='/'
+    className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+  >
+    <img
+      src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
+    />
+  </Link>
       <form onSubmit={handleSubmit}>
         <TextInput
           type='text'
