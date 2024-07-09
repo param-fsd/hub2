@@ -47,11 +47,14 @@ export default function SignIn() {
       <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
         {/* left */}
         <div className='flex-1'>
-          <Link to='/' className='font-bold dark:text-white text-4xl'>
-          <span className='px-3 py-2 bg-gradient-to-r from-green-400 via-blue-400 to-teal-400 rounded-md text-white shadow-lg'>
-  JD News Hub
-</span>
-          </Link>
+        <Link
+    to='/'
+    className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+  >
+    <img
+      src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
+    />
+  </Link>
           <p className='text-sm mt-5'>
             You can sign in with your email and password
             or with Google.
