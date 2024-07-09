@@ -7,15 +7,14 @@ export default function FooterCom() {
       <div className='w-full max-w-7xl mx-auto'>
         <div className='grid w-full justify-between sm:flex md:grid-cols-1'>
           <div className='mt-5'>
-            <Link
-              to='/'
-              className='self-center whitespace-nowrap text-lg sm:text-xl font-semibold dark:text-white'
-            >
-              <span className='px-3 py-2 bg-gradient-to-r from-green-400 via-blue-400 to-teal-400 rounded-md text-white shadow-lg'>
-  JD News Hub
-</span>
-               
-            </Link>
+          <Link
+    to='/'
+    className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
+  >
+    <img
+      src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
+    />
+  </Link>
           </div>
           <div className='grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6'>
             <div>
