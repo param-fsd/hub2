@@ -8,13 +8,14 @@ export default function FooterCom() {
         <div className='grid w-full justify-between sm:flex md:grid-cols-1'>
           <div className='mt-5'>
           <Link
-    to='/'
-    className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
-  >
-    <img
-      src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
-    />
-  </Link>
+  to='/'
+  className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white flex items-center'
+>
+  <img
+    src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
+  />
+  <span className='ml-2 text-2xl sm:text-3xl font-sans'>JD NEWS HUB</span>
+</Link>
           </div>
           <div className='grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6'>
             <div>
