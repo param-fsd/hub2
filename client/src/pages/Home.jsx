@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
+import Categories from '../components/Categery';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <div className='bg-gray-50 dark:bg-gray-900 min-h-screen'>
       <div className='flex flex-col gap-8 p-10 lg:p-20 px-6 max-w-7xl mx-auto'>
+      <Categories />
         <h1 className='text-4xl font-bold lg:text-5xl text-gray-800 dark:text-white'>
           Welcome to JD News Hub.
         </h1>
