@@ -6,6 +6,15 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
+import { 
+  faWhatsapp, 
+  faFacebook, 
+  faTwitter, 
+  faLinkedin, 
+  faPinterest, 
+  faInstagram 
+} from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -14,6 +23,7 @@ export default function PostPage() {
   const [post, setPost] = useState(null);
   const [recentPosts, setRecentPosts] = useState(null);
   const [speechSynthesisInstance, setSpeechSynthesisInstance] = useState(null);
+  const [showShareIcons, setShowShareIcons] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -70,31 +80,39 @@ export default function PostPage() {
       }
     };
   }, []);
-  // Utility function to strip HTML tags
-const stripHTML = (html) => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-  return tempDiv.textContent || tempDiv.innerText || '';
-};
 
-  const startSpeech = () => {
-  if (speechSynthesisInstance && post && post.content) {
-    const textContent = stripHTML(post.content);
-    speechSynthesisInstance.text = textContent;
-    speechSynthesisInstance.lang = 'kn-IN'; // Set language to Kannada
-    window.speechSynthesis.speak(speechSynthesisInstance);
-  }
-};
-  
-  const pauseSpeech = () => {
-    if (speechSynthesisInstance) {
-      window.speechSynthesis.pause();
-    }
+  // Utility function to strip HTML tags
+  const stripHTML = (html) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
   };
 
-  const resumeSpeech = () => {
-    if (speechSynthesisInstance) {
-      window.speechSynthesis.resume();
+  const startSpeech = () => {
+    if (speechSynthesisInstance && post && post.content) {
+      const kannadaContent = stripHTML(post.content); // Ensure post.content is in Kannada
+
+      console.log('Kannada content:', kannadaContent); // Log content for debugging
+
+      const utterance = new SpeechSynthesisUtterance();
+      utterance.text = kannadaContent;
+      utterance.lang = 'kn-IN'; // Set language to Kannada
+
+      // Event listeners for error and end of speech
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event.error);
+      };
+
+      utterance.onend = () => {
+        console.log('Speech synthesis complete.');
+      };
+
+      // Start speech synthesis
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        console.error('Speech synthesis error:', error);
+      }
     }
   };
 
@@ -104,30 +122,44 @@ const stripHTML = (html) => {
     }
   };
 
-const stripHTML1 = (html) => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-  return tempDiv.textContent || tempDiv.innerText || '';
-};
+  const handleShare = () => {
+    setShowShareIcons(!showShareIcons);
+  };
 
+  const handleWhatsAppShare = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank');
+  };
 
-const handleShare = () => {
-  if (post && navigator.share) {
-    // Clean the content to remove HTML tags
-    const cleanContent = stripHTML1(post.content);
+  const handleFacebookShare = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank');
+  };
 
-    navigator.share({
-      title: post.title,
-      text: cleanContent.slice(0, 100), // Short description without HTML tags
-      url: window.location.href,
-    })
-    .catch((error) => console.error('Error sharing', error));
-  } else {
-    navigator.clipboard.writeText(window.location.href)
-      .then(() => alert('Link copied to clipboard!'))
-      .catch((error) => console.error('Error copying link', error));
-  }
-};
+  const handleTwitterShare = () => {
+    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleLinkedInShare = () => {
+    const url = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}`;
+    window.open(url, '_blank');
+  };
+
+  const handlePinterestShare = () => {
+    const url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&description=${encodeURIComponent(post.title)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleInstagramShare = () => {
+    alert('Instagram does not support direct sharing via URL.');
+  };
+
+  const handleEmailShare = () => {
+    const url = `mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_self');
+  };
+
   if (loading) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
@@ -152,12 +184,23 @@ const handleShare = () => {
 
       {/* Share Button */}
       <div className='flex justify-center my-5 mb-2 mt-2'>
-  <Button color='gray' onClick={handleShare} className='flex items-center' pill size='xs'>
-    <FontAwesomeIcon icon={faShareAlt} className='mr-2' />
-    <span className='text-sm'>Share</span>
-  </Button>
-</div>
+        <Button color='gray' onClick={handleShare} className='flex items-center' pill size='xs'>
+          <FontAwesomeIcon icon={faShareAlt} className='mr-2' />
+          <span className='text-sm'>Share</span>
+        </Button>
+      </div>
 
+      {showShareIcons && (
+        <div className='flex justify-center space-x-2'>
+          <FontAwesomeIcon icon={faWhatsapp} className='text-xl text-green-500' onClick={handleWhatsAppShare} />
+          <FontAwesomeIcon icon={faFacebook} className='text-xl text-blue-600' onClick={handleFacebookShare} />
+          <FontAwesomeIcon icon={faTwitter} className='text-xl text-blue-400' onClick={handleTwitterShare} />
+          <FontAwesomeIcon icon={faLinkedin} className='text-xl text-blue-700' onClick={handleLinkedInShare} />
+          <FontAwesomeIcon icon={faPinterest} className='text-xl text-red-600' onClick={handlePinterestShare} />
+          <FontAwesomeIcon icon={faInstagram} className='text-xl text-pink-500' onClick={handleInstagramShare} />
+          <FontAwesomeIcon icon={faEnvelope} className='text-xl text-gray-600' onClick={handleEmailShare} />
+        </div>
+      )}
 
       <img
         src={post && post.image}
@@ -172,29 +215,14 @@ const handleShare = () => {
         </span>
       </div>
       <div className='flex flex-col items-center justify-center gap-2 mt-2'>
-        
         <div className='flex justify-center items-center gap-2'>
-        <h2>Speechout</h2>
+          <h2>Speechout</h2>
           <Button
             color='primary'
             className='flex items-center gap-1'
             onClick={startSpeech}
           >
             <i className='fas fa-play'></i> 
-          </Button>
-          <Button
-            color='yellow'
-            className='flex items-center gap-1'
-            onClick={pauseSpeech}
-          >
-            <i className='fas fa-pause'></i> 
-          </Button>
-          <Button
-            color='blue'
-            className='flex items-center gap-1'
-            onClick={resumeSpeech}
-          >
-            <i className='fas fa-play-circle'></i> 
           </Button>
           <Button
             color='red'
@@ -209,8 +237,6 @@ const handleShare = () => {
         className='p-3 max-w-2xl mx-auto w-full post-content'
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
-
-  
 
       <div className='max-w-4xl mx-auto w-full mt-10'>
         <CallToAction />
