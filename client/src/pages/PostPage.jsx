@@ -15,7 +15,7 @@ import {
   faInstagram 
 } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import Categories from '../components/Categery';
+
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -171,7 +171,6 @@ export default function PostPage() {
 
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
-      <Categories/>
       <h1 className='text-3xl mt-3 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
         {post && post.title}
       </h1>
