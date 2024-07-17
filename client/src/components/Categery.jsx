@@ -1,4 +1,3 @@
-// src/components/Categories.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,16 +13,18 @@ const categories = [
 
 const Categories = () => {
   return (
-    <div className='flex flex-wrap gap-4 justify-center'>
-      {categories.map((category) => (
-        <Link
-          key={category.name}
-          to={`/search?category=${category.query}`}
-          className='px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700'
-        >
-          {category.name}
-        </Link>
-      ))}
+    <div className='overflow-x-auto whitespace-nowrap py-2'>
+      <div className='inline-flex gap-1'>
+        {categories.map((category) => (
+          <Link
+            key={category.name}
+            to={`/search?category=${category.query}`}
+            className='px-3 py-1 bg-white text-black border border-black rounded-full hover:bg-gray-200'
+          >
+            {category.name}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
