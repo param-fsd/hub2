@@ -15,6 +15,7 @@ import {
   faInstagram 
 } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import Categories from '../components/Categery';
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -170,7 +171,8 @@ export default function PostPage() {
 
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
-      <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
+      <Categories/>
+      <h1 className='text-3xl mt-3 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
         {post && post.title}
       </h1>
       <Link
@@ -191,7 +193,7 @@ export default function PostPage() {
       </div>
 
       {showShareIcons && (
-        <div className='flex justify-center space-x-2'>
+        <div className='flex justify-center space-x-4'>
           <FontAwesomeIcon icon={faWhatsapp} className='text-xl text-green-500' onClick={handleWhatsAppShare} />
           <FontAwesomeIcon icon={faFacebook} className='text-xl text-blue-600' onClick={handleFacebookShare} />
           <FontAwesomeIcon icon={faTwitter} className='text-xl text-blue-400' onClick={handleTwitterShare} />
