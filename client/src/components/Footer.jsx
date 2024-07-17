@@ -14,7 +14,7 @@ export default function FooterCom() {
   <img
     src="https://cdn.glitch.global/0b5c3fb1-8047-45d2-8de9-2d8258722094/jd_techh.png?v=1720537290292" style={{width: '50px'}}
   />
-  <span className='ml-2 text-2xl sm:text-3xl font-sans'>JD NEWS HUB</span>
+  <span className='ml-1 text-2xl sm:text-2xl font-mono'>JD NEWS HUB</span>
 </Link>
           </div>
           <div className='grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6'>
